@@ -19,4 +19,20 @@ document.addEventListener('DOMContentLoaded', function() {
       document.querySelector('#answer').innerHTML = 'Incorrect';
     });
   }
+
+  document.querySelector('#check').addEventListener('click', function() {
+    //
+    let input = document.querySelector('input');
+
+    //Lowercases the input and compares
+    if (input.value.toLowerCase() == 'russia') {
+      input.style.backgroundColor = 'green';
+      document.querySelector('#answer2').innerHTML = 'Correct!';
+    }
+    else {
+      input.style.backgroundColor = 'red';
+      document.querySelector('#answer2').innerHTML = 'Incorrect';
+    }
+  });
+
 });
