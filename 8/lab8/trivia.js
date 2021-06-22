@@ -1,5 +1,12 @@
-let button = document.querySelector('button');
+function changeColor(answer)
+{
+  if (answer == true)
+  {
+    document.getElementById('button').style.backgroundColor = 'green';
+  }
 
-document.querySelector('button').onclick = function() {
-  button.style.color = '#ff0000';
-};
+  else
+  {
+    document.getElementById('button').style.backgroundColor = 'red';
+  }
+}
