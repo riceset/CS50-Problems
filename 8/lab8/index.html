@@ -2,7 +2,7 @@
 
 <html lang="en">
     <head>
-        <script src="trivia.js" type="text/javascript"></script>
+        <script src="logic.js" type="text/javascript"></script>
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
         <link href="styles.css" rel="stylesheet">
         <title>Trivia!</title>
@@ -18,11 +18,11 @@
             <div class="section">
                 <h2>Part 1: Multiple Choice </h2>
                 <hr>
-                <h3>Who is the current president of the United States of America?</h3>
+                <h3>Who is the current president of the United States of America? (2021)</h3>
 
-                <button id="obama" onclick="changeColor(false);">Barack Obama</button>
-                <button id="trump" onclick="changeColor(false);">Donald Trump</button>
-                <button id="biden" onclick="changeColor(true);">Joe Biden</button>
+                <button class="false">Barack Obama</button>
+                <button class="false">Donald Trump</button>
+                <button class="true">Joe Biden</button>
                 <h3 id="answer"></h3>
             </div>
 
