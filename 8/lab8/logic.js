@@ -34,5 +34,4 @@ document.addEventListener('DOMContentLoaded', function() {
       document.querySelector('#answer2').innerHTML = 'Incorrect';
     }
   });
-
 });
