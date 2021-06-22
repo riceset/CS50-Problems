@@ -17,6 +17,7 @@ function changeColor()
 function checkAnswer()
 {
   var answer = document.getElementById('box').value;
+  alert(answer);
 
   document.querySelector('#check').onclick = function() {
     if (answer.toLowerCase() == 'russia') {
