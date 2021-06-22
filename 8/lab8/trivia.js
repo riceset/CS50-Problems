@@ -1,12 +1,12 @@
 function changeColor(answer)
 {
-  if (answer == true)
-  {
-    document.getElementById('button').style.backgroundColor = 'green';
+  document.querySelector('#obama').onclick = function() {
+    this.style.color = 'red';
   }
-
-  else
-  {
-    document.getElementById('button').style.backgroundColor = 'red';
+  document.querySelector('#trump').onclick = function() {
+    this.style.color = 'red';
+  }
+  document.querySelector('#biden').onclick = function() {
+    this.style.color = 'green';
   }
 }
