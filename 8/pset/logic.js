@@ -1,17 +1,17 @@
-//All the greetings
-let greetings = [
-  "Hello World!",
-  "Hola Mundo!",
-  "ハローワールド！",
-  "Bonjour le monde!",
-  "你好世界!",
-];
+window.setInterval(function() {
+  let body = document.querySelector('header');
 
-alert(greetings[1]);
-let counter = 0;
+  let greetings = [
+    "Hola Mundo!",
+    "Bonjour le Monde!",
+    "你好世界!"
+  ]
 
-// window.setInterval(function() {
-//   greeting.innerHTML = greetings[counter];
-//   counter++;
-//   counter = counter == lenght ? counter = 0 : counter = counter;
-// }, 3000);
+  for (let i = 0; i < greetings.length; i++)
+  {
+    body.innerHTML = greetings[i];
+
+    if (i == greetings.length - 1)
+      i = 0;
+  }
+}, 500);
