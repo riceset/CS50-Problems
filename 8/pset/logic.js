@@ -1,17 +1,19 @@
-window.setInterval(function() {
+var i = 0;
+
+function changeLang() {
+
   let body = document.querySelector('header');
 
   let greetings = [
     "Hola Mundo!",
     "Bonjour le Monde!",
-    "你好世界!"
-  ]
+    "Hello World!"
+  ];
 
-  for (let i = 0; i < greetings.length; i++)
-  {
-    body.innerHTML = greetings[i];
+  body.innerHTML = greetings[i];
 
-    if (i == greetings.length - 1)
-      i = 0;
-  }
-}, 500);
+  i++;
+
+  if (i == greetings.length)
+    i = 0;
+}
