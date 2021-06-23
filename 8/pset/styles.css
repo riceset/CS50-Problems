@@ -1,0 +1,16 @@
+body {
+  text-align: center;
+  color: white;
+  background-color: purple;
+}
+header {
+  font-size: xx-large;
+}
+
+main {
+  font-size: x-large;
+}
+
+footer {
+  font-size: medium;
+}
