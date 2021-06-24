@@ -37,8 +37,9 @@ function colorHome() {
     "#0000ff"
   ];
   button.style.backgroundColor = colors[j];
+  button.style.borderColor = colors[j];
   j++;
   if (j == colors.length)
     j = 0;
 }
-window.setInterval(colorHome, 900);
+window.setInterval(colorHome, 1100);
