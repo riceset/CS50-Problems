@@ -9,8 +9,13 @@ main {
   font-family: "papyrus";
 }
 
-a, a:hover {
+a {
+  text-decoration: none;
   color: white;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 header {
@@ -18,4 +23,8 @@ header {
   color: white;
   padding-top: 200px;
   font-size: 200px;
+}
+
+#fromcolors {
+  font-family: Arial;
 }
