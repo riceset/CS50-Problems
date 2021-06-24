@@ -1,3 +1,4 @@
+//Changes both the color and the text on the colors page
 var i = 0;
 var j = 0;
 
