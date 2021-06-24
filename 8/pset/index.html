@@ -7,25 +7,44 @@
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
         <link href="styles.css" rel="stylesheet">
-        <title>My Webpage</title>
+        <title>Home</title>
     </head>
     <body>
         <header>
-            Hello World!
         </header>
         <main>
-            <h5>Welcome to my first website.</h5>
-
-            <h5 class="tryclick">Try clicking on the CS50 cat! 😁</h5><br>
-
-            <a href="https://bit.ly/2TTncFQ" target="_blank">
-            <img alt="cat" id="cat" onclick="changeImage();" src="https://user-images.githubusercontent.com/48802655/123182497-f6109780-d465-11eb-8685-c27aabb6539e.jpg"></a><br>
-            <a href="about.htm">About me</a> | 
-            <a href="colors.htm">Colors</a> | 
-            <a href="about.htm">Others</a>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="card" style="width: 18rem;">
+                        <img src="colors.jpeg" class="card-img-top" alt="colors">
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="card" style="width: 18rem;">
+                        <img src="about.jpg" class="card-img-top" alt="about">
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="card" style="width: 18rem;">
+                        <img src="cat.jpg" class="card-img-top" alt="cat">
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+ 
+            </div>
         </main>
         <footer>
-            🐱
         </footer>
     </body>
 </html>
