@@ -1,15 +1,20 @@
 var i = 0;
 
-function changeLang() {
+function changeColor() {
   let body = document.querySelector('body');
+
   let colors = [
     '#ff0000',
     '#00ff00',
-    '0000ff'
+    '#0000ff'
   ];
 
   body.style.backgroundColor = colors[i];
+
   i++;
-  if (i == greetings.length)
+
+  if (i == colors.length)
     i = 0;
 }
+
+window.setInterval(changeColor, 500);

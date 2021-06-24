@@ -1,1 +1,14 @@
-a
+body {
+  text-align: center;
+  color: white;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 600px;
+  padding-bottom: 0px;
+  font-size: x-large;
+  font-family: "papyrus";
+}
+
+a, a:hover {
+  color: white;
+}
