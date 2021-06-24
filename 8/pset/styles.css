@@ -2,16 +2,31 @@ body {
   text-align: center;
   color: black;
   background-color: white;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 
-h5 {
+h5, a {
   font-family: "papyrus";
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
+
+a, a:hover {
+  color: red;
+}
+
 header {
   font-family: "Copperplate";
   font-size: xx-large;
   padding-top: 30px;
   padding-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 main {
@@ -19,6 +34,8 @@ main {
   font-size: x-large;
   padding-top: 30px;
   padding-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 footer {
@@ -26,9 +43,15 @@ footer {
   font-size: medium;
   padding-top: 0px;
   padding-bottom: 30px;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 img {
   border-radius: 5%;
   width: 350px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }

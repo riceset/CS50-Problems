@@ -14,7 +14,7 @@ function changeLang() {
     i = 0;
 }
 
-window.setInterval(changeLang, 700);
+window.setInterval(changeLang, 900);
 
 function changeImage() {
   if (document.getElementById("cat").src == "https://user-images.githubusercontent.com/48802655/123182497-f6109780-d465-11eb-8685-c27aabb6539e.jpg") 
