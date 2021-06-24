@@ -58,3 +58,13 @@ img {
 #fromcolors {
   color: white;
 }
+
+#catbutton {
+  background-color: black;
+  border: black;
+}
+
+#aboutbutton {
+  background-color: #4B0082;
+  border: #4B0082;
+}
