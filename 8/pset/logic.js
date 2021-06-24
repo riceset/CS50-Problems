@@ -20,6 +20,7 @@ function changeImage() {
   if (document.getElementById("cat").src == "https://user-images.githubusercontent.com/48802655/123182497-f6109780-d465-11eb-8685-c27aabb6539e.jpg") 
   {
     document.getElementById("cat").src = "https://user-images.githubusercontent.com/48802655/123182105-20ae2080-d465-11eb-90fd-c3bdf9df264e.gif";
+    document.querySelector('#tryclick').innerHTML = "RICKROLLED!!!";
   }
   else 
   {

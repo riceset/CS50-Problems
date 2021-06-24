@@ -8,13 +8,6 @@ body {
   padding-bottom: 0px;
 }
 
-h5, a {
-  padding-left: 0px;
-  padding-right: 0px;
-  padding-top: 0px;
-  padding-bottom: 0px;
-}
-
 a, a:hover {
   color: red;
 }
@@ -23,16 +16,12 @@ header {
   font-family: "Copperplate";
   font-size: xx-large;
   padding-top: 30px;
-  padding-bottom: 0px;
-  padding-left: 0px;
-  padding-right: 0px;
 }
 
 main {
   font-family: "arial";
   font-size: x-large;
   padding-top: 30px;
-  padding-bottom: 0px;
   padding-left: 100px;
   padding-right: 100px;
 }
@@ -40,19 +29,12 @@ main {
 footer {
   font-family: "arial";
   font-size: medium;
-  padding-top: 0px;
   padding-bottom: 30px;
-  padding-left: 0px;
-  padding-right: 0px;
 }
 
 img {
   border-radius: 5%;
   width: 350px;
-  padding-left: 0px;
-  padding-right: 0px;
-  padding-top: 0px;
-  padding-bottom: 0px;
 }
 
 #fromcolors {
@@ -67,4 +49,8 @@ img {
 #aboutbutton {
   background-color: #4B0082;
   border: #4B0082;
+}
+
+#tryclick {
+  font-family: serif;
 }
