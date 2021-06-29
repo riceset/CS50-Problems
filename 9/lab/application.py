@@ -21,8 +21,9 @@ def index():
         month = request.form.get("month")
         day = request.form.get("day")
 
+        # .title() auto capitalizes the first letter of each string present in the name entered
         db.execute("INSERT INTO birthdays (name, month, day) VALUES (?, ?, ?)",
-                   name, month, day)
+                   name.title(), month, day)
 
         return redirect("/")
 
