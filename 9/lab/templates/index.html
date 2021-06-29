@@ -16,10 +16,10 @@
                 <h2>Add a Birthday</h2>
                 <!-- TODO: Create a form for users to submit a name, a month, and a day -->
                 <form action="/" method="post">
-                    <input type="text" name="name" placeholder="Name" autocomplete="off">
-                    <input type="text" name="month" placeholder="Month" autocomplete="off">
-                    <input type="text" name="day" placeholder="Day" autocomplete="off">
-                    <input type="submit">
+                    <input type="text" onkeyup="checker()" id="name" name="name" placeholder="Name" autocomplete="off">
+                    <input type="text" onkeyup="checker()" id="month" name="month" placeholder="Month" autocomplete="off">
+                    <input type="text" onkeyup="checker()" id="day" name="day" placeholder="Day" autocomplete="off">
+                    <input type="submit" id="submit" disabled>
                 </form>
             </div>
 
@@ -47,5 +47,26 @@
                 </table>
             </div>
         </div>
+        <script>
+            //Additional Feature!
+            //Checks if any of the boxes are left blank
+            //It also checks if the user entered a valid birthday
+            //It also checks if the name field contains any unicode character
+            //Source: https://stackoverflow.com/questions/61550004/check-if-string-contains-any-letter-javascript-jquery
+            //Otherwise, the submit button is disabled
+           function checker() {
+                name = document.querySelector("#name").value;
+                month = document.querySelector("#month").value;
+                day = document.querySelector("#day").value;
+
+                if ((name === '' || month === '' || day === '') || 
+                                !(month >= 1 && month <= 12) ||
+                                !(day >= 1 && day <= 31) ||
+                                !(/\p{L}/u.test(name)))
+                    document.querySelector("#submit").disabled = true;
+
+                else document.querySelector("#submit").disabled = false;
+            }
+       </script>
     </body>
 </html>
