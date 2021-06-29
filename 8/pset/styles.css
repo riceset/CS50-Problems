@@ -2,10 +2,6 @@ body {
   text-align: center;
   color: black;
   background-color: white;
-  padding-left: 0px;
-  padding-right: 0px;
-  padding-top: 0px;
-  padding-bottom: 0px;
 }
 
 a, a:hover {
@@ -53,4 +49,8 @@ img {
 
 #tryclick {
   font-family: serif;
+}
+
+#title {
+  color: red;
 }
