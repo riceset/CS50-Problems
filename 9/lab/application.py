@@ -27,9 +27,11 @@ def index():
 
             return redirect("/")
 
+        # Removes a birthday
         elif 'nameDel' in request.form:
             name = request.form.get("nameDel")
             db.execute("DELETE FROM birthdays WHERE name = ?", name.title())
+
             return redirect("/")
 
     else:
