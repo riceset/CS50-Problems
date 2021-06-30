@@ -39,7 +39,7 @@ def index():
 
             matches = db.execute("SELECT * FROM birthdays WHERE name = ?", name.title())
 
-            if len(matches) > 0:
+            if len(matches) == 0:
                 return "ERROR"
  
             db.execute("DELETE FROM birthdays WHERE name = ?", name.title())
