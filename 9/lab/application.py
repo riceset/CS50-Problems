@@ -21,6 +21,12 @@ def index():
             month = request.form.get("month")
             day = request.form.get("day")
 
+            matches = db.execute("SELECT * FROM birthdays WHERE name = ?", name.title())
+
+            # If the person entered is already in the database, return an error
+            if len(matches) > 0:
+                return "ERROR"
+            
             # .title() auto capitalizes the first letter of each string present in the name entered
             db.execute("INSERT INTO birthdays (name, month, day) VALUES (?, ?, ?)",
                     name.title(), month, day)
@@ -30,6 +36,12 @@ def index():
         # Removes a birthday
         elif 'nameDel' in request.form:
             name = request.form.get("nameDel")
+
+            matches = db.execute("SELECT * FROM birthdays WHERE name = ?", name.title())
+
+            if len(matches) > 0:
+                return "ERROR"
+ 
             db.execute("DELETE FROM birthdays WHERE name = ?", name.title())
 
             return redirect("/")
