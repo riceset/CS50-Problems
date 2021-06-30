@@ -1,6 +1,6 @@
 import os
 from cs50 import SQL
-from flask import Flask, flash, jsonify, redirect, render_template, request, session
+from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for
 
 # Configure application
 app = Flask(__name__)
@@ -25,7 +25,7 @@ def index():
 
             # If the person entered is already in the database, return an error
             if len(matches) > 0:
-                return "ERROR"
+                return render_template("error.html", message="You are trying to add a person that is already present on the list.")
             
             # .title() auto capitalizes the first letter of each string present in the name entered
             db.execute("INSERT INTO birthdays (name, month, day) VALUES (?, ?, ?)",
@@ -40,7 +40,7 @@ def index():
             matches = db.execute("SELECT * FROM birthdays WHERE name = ?", name.title())
 
             if len(matches) == 0:
-                return "ERROR"
+                return render_template("error.html", message="The person entered isn't present on the list.")
  
             db.execute("DELETE FROM birthdays WHERE name = ?", name.title())
 
