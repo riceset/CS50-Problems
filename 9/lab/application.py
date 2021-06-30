@@ -16,16 +16,21 @@ def index():
     birthdays = db.execute("SELECT * FROM birthdays")
 
     if request.method == "POST":
+        if 'name' in request.form:
+            name = request.form.get("name")
+            month = request.form.get("month")
+            day = request.form.get("day")
 
-        name = request.form.get("name")
-        month = request.form.get("month")
-        day = request.form.get("day")
+            # .title() auto capitalizes the first letter of each string present in the name entered
+            db.execute("INSERT INTO birthdays (name, month, day) VALUES (?, ?, ?)",
+                    name.title(), month, day)
 
-        # .title() auto capitalizes the first letter of each string present in the name entered
-        db.execute("INSERT INTO birthdays (name, month, day) VALUES (?, ?, ?)",
-                   name.title(), month, day)
+            return redirect("/")
 
-        return redirect("/")
+        elif 'nameDel' in request.form:
+            name = request.form.get("nameDel")
+            db.execute("DELETE FROM birthdays WHERE name = ?", name.title())
+            return redirect("/")
 
     else:
         return render_template("index.html", birthdays=birthdays)

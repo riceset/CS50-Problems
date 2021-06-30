@@ -19,10 +19,16 @@
                     <input type="text" onkeyup="checker()" id="name" name="name" placeholder="Name" autocomplete="off">
                     <input type="text" onkeyup="checker()" id="month" name="month" placeholder="Month" autocomplete="off">
                     <input type="text" onkeyup="checker()" id="day" name="day" placeholder="Day" autocomplete="off">
-                    <input type="submit" id="submit" disabled>
+                    <input type="submit" id="submit" value="Add" disabled>
                 </form>
             </div>
-
+            <div class="section">
+                <h2>Remove a Birthday</h2>
+                <form action="/" method="post">
+                    <input type="text" onkeyup="checkerDel()" id="nameDel" name="nameDel" placeholder="Name" autocomplete="off">
+                    <input type="submit" id="submitDel" value="Delete" disabled>
+                </form>
+            </div>
             <div class="section">
 
                 <h2>All Birthdays</h2>
@@ -66,6 +72,13 @@
                     document.querySelector("#submit").disabled = true;
 
                 else document.querySelector("#submit").disabled = false;
+            }
+
+            function checkerDel() {
+                name = document.querySelector("#nameDel").value;
+                if (name === '' || !(/\p{L}/u.test(name)))
+                    document.querySelector("#submitDel").disabled = true;
+                else document.querySelector("#submitDel").disabled = false;
             }
        </script>
     </body>
