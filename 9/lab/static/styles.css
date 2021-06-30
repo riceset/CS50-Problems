@@ -18,8 +18,9 @@ body {
 }
 
 .jumbotron {
-    background-color: #477bff;
+    background-image: linear-gradient(to right, #ff432e, #fdef14, #4aa8db, #b1eb00, #ff85cb);
     color: #fff;
+    text-shadow: 2px 2px 2px #000;
     margin-bottom: 2rem;
     padding: 2rem 1rem;
     text-align: center;
@@ -80,4 +81,3 @@ table td {
 tbody tr:nth-of-type(odd) {
     background-color: rgb(179, 208, 255, 0.3)
 }
-
