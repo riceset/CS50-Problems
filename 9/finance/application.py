@@ -115,7 +115,27 @@ def logout():
 @login_required
 def quote():
     """Get stock quote."""
-    return apology("TODO")
+    if request.method == "POST":
+
+        # Gets the inputted symbol
+        symbol = request.form.get("symbol")
+
+        # Gets the information about it
+        stock_info = lookup(symbol)
+
+        # If the symbol entered is invalid
+        if stock_info == None:
+            return apology("invalid symbol")
+
+        # Gets name and price from the dictionary
+        # {'name': 'Apple Inc', 'price': 137.25, 'symbol': 'AAPL'}
+        name = stock_info["name"]
+        price = stock_info["price"]
+
+        return render_template("quoted.html", name=name, price=price, symbol=symbol)
+
+    else:
+        return render_template("quote.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -133,37 +153,37 @@ def register():
 
         # Checks for empty input
         if not username:
-            return apology("must provide username", 401)
+            return apology("must provide username", 403)
 
         elif not password:
-            return apology("must provide password", 401)
+            return apology("must provide password", 403)
 
         elif not confirmation:
             return apology("must confirm password", 403)
 
         # Checks if the username entered is already registered on the DB
         elif len(username_matches) == 1:
-            return apology("the username entered is not available", 409)
+            return apology("the username entered is not available")
 
         # Checks if the passwords match
         elif (password != confirmation):
-            return apology("passwords don't match", 400)
+            return apology("passwords don't match")
 
         # Secure Password Check (source: https://www.geeksforgeeks.org/password-validation-in-python/)
         elif len(password) < 6:
-            return apology("password must be at least 6 characters", 400)
+            return apology("password must be at least 6 characters")
 
         elif not any(char.isdigit() for char in password):
-            return apology("passwords should contain at least ine number", 400)
+            return apology("passwords should contain at least ine number")
 
         elif not any(char.isupper() for char in password):
-            return apology("password should contain at leats one uppercase letter", 400)
+            return apology("password should contain at leats one uppercase letter")
 
         elif not any(char.islower() for char in password):
-            return apology("password should contain at leats one lowercase letter", 400)
+            return apology("password should contain at leats one lowercase letter")
 
         elif not any(char in SPECIAL for char in password):
-            return apology("passwords should have at least one special character", 400)
+            return apology("passwords should have at least one special character")
 
         # Inserts the new user into the DB
         db.execute("INSERT INTO users (username, hash) VALUES (?, ?)", username, generate_password_hash(password))
