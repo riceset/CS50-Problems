@@ -46,7 +46,8 @@ SPECIAL = ['!', '"', '#', '$', '%', '&', '(', ')', '*', '+', '-', '.', ',', '/',
 @login_required
 def index():
     """Show portfolio of stocks"""
-    return apology("TODO")
+    transactions = db.execute("SELECT * FROM transactions")
+    return render_template("index.html", transactions=transactions)
 
 
 @app.route("/buy", methods=["GET", "POST"])
