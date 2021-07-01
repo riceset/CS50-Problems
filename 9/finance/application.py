@@ -127,6 +127,8 @@ def register():
         username = request.form.get("username")
         password = request.form.get("password")
         confirmation = request.form.get("confirmation")
+
+        # Getting all the matches on the DB for the username entered
         username_matches = db.execute("SELECT * FROM users WHERE username = ?", username)
 
         # Checks for empty input
@@ -139,9 +141,11 @@ def register():
         elif not confirmation:
             return apology("must confirm password", 403)
 
+        # Checks if the username entered is already registered on the DB
         elif len(username_matches) == 1:
             return apology("the username entered is not available", 409)
 
+        # Checks if the passwords match
         elif (password != confirmation):
             return apology("passwords don't match", 400)
 
@@ -161,9 +165,11 @@ def register():
         elif not any(char in SPECIAL for char in password):
             return apology("passwords should have at least one special character", 400)
 
+        # Inserts the new user into the DB
         db.execute("INSERT INTO users (username, hash) VALUES (?, ?)", username, generate_password_hash(password))
 
         return redirect("/")
+
     else:
         return render_template("register.html")
 
