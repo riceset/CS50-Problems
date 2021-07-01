@@ -1,12 +1,11 @@
 import os
-
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
-
+from datetime import datetime
 from helpers import apology, login_required, lookup, usd
 
 # Configure application
@@ -54,7 +53,58 @@ def index():
 @login_required
 def buy():
     """Buy shares of stock"""
-    return render_template("buy.html")
+
+    if request.method == "POST":
+
+        # Gets the inputted symbol
+        symbol = request.form.get("symbol")
+        shares = request.form.get("shares")
+
+        # Checks if the input fields are blank
+        if symbol == '':
+            return apology("must provide symbol")
+        elif shares == '':
+            return apology("must provide number of shares")
+
+        # Converts the number of shares to an integer
+        shares = int(shares)
+
+        # Checks if the number of shares the user is trying to buy is valid
+        if shares < 1:
+            return apology("must provide valid number of shares")
+
+        # Gets the information about it
+        stock_info = lookup(symbol)
+
+        # If the symbol entered is invalid
+        if stock_info == None:
+            return apology("invalid symbol")
+
+        # Gets the name and price of the stock
+        name = stock_info["name"]
+        price = stock_info["price"]
+
+        # Gets the cash the current user has
+        cash = db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])
+        for dictionary in cash:
+            cash = dictionary["cash"]
+
+        total = price * shares
+
+        # If the user can't afford the purchase
+        if cash < total:
+            apology("can't afford")
+
+        # Purchase process
+        cash = cash - total
+
+        # Updates the DB
+        db.execute("UPDATE users SET cash = ? WHERE id = ?", cash, session["user_id"])
+
+        return render_template("buy.html")
+
+    else:
+        return render_template("buy.html")
 
 
 @app.route("/history")
