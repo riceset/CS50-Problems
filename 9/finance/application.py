@@ -101,7 +101,14 @@ def buy():
         # Updates the DB
         db.execute("UPDATE users SET cash = ? WHERE id = ?", cash, session["user_id"])
 
-        return render_template("buy.html")
+        # Gets the date and time
+        date = datetime.today().strftime('%Y/%m/%d')
+        time = datetime.today().strftime('%H:%M:%S')
+
+        # Inserts all the transaction information into a table
+        db.execute("INSERT INTO transactions (symbol, name, price, shares, total, date, time, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", symbol, name, price, shares, total, date, time, session["user_id"])
+
+        return redirect("/")
 
     else:
         return render_template("buy.html")
