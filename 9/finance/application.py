@@ -47,7 +47,46 @@ SPECIAL = ['!', '"', '#', '$', '%', '&', '(', ')', '*', '+', '-', '.', ',', '/',
 def index():
     """Show portfolio of stocks"""
     transactions = db.execute("SELECT * FROM transactions")
-    return render_template("index.html", transactions=transactions)
+
+    # Gets all the relevant stock information
+    symbolShares = db.execute("SELECT symbol, shares FROM transactions")
+
+    # creates 3 lists with symbols / shares / price from all the stocks the user has
+    symbols = []
+    shares = []
+    for dictionary in symbolShares:
+        symbols.append(dictionary["symbol"])
+        shares.append(dictionary["shares"])
+
+    # Gets a list of dictionaries with the newest information for each stock
+    incomingInfo = []
+    for symbol in symbols:
+        incomingInfo.append(lookup(symbol))
+
+    # Gets the price for each stock
+    prices = []
+    for dictionary in incomingInfo:
+        prices.append(dictionary["price"])
+
+    # Multiplies the price of each stock with the quantity the user currently has
+    total = []
+    for share, price, in zip(shares, prices):
+        total.append(share * price)
+
+    totalDict = dict(zip(symbols, total))
+    priceDict = dict(zip(symbols, prices))
+
+    for key in totalDict:
+        db.execute("UPDATE transactions SET total = ? WHERE symbol = ?", totalDict[key], key)
+    for key in priceDict:
+        db.execute("UPDATE transactions SET price = ? WHERE symbol = ?", priceDict[key], key)
+
+    cash = db.execute("SELECT cash from users WHERE id = ?", session["user_id"])
+    for dictionary in cash:
+        cash = dictionary["cash"]
+
+    print(transactions)
+    return render_template("index.html", transactions=transactions, cash=cash)
 
 
 @app.route("/buy", methods=["GET", "POST"])
@@ -94,7 +133,7 @@ def buy():
 
         # If the user can't afford the purchase
         if cash < total:
-            apology("can't afford")
+            return apology("can't afford")
 
         # Purchase process
         cash = cash - total
