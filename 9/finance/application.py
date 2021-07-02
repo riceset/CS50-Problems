@@ -46,10 +46,10 @@ SPECIAL = ['!', '"', '#', '$', '%', '&', '(', ')', '*', '+', '-', '.', ',', '/',
 @login_required
 def index():
     """Show portfolio of stocks"""
-    transactions = db.execute("SELECT * FROM transactions")
+    transactions = db.execute("SELECT * FROM transactions WHERE user_id = ?", session["user_id"])
 
     # Gets all the relevant stock information
-    symbolShares = db.execute("SELECT symbol, shares FROM transactions")
+    symbolShares = db.execute("SELECT symbol, shares FROM transactions where user_id = ?", session["user_id"])
 
     # creates 3 lists with symbols / shares / price from all the stocks the user has
     symbols = []
@@ -73,20 +73,38 @@ def index():
     for share, price, in zip(shares, prices):
         total.append(share * price)
 
+    # Limits all values to 2 decimal points
+    for index, item in enumerate(total):
+        total[index] = float("{:.2f}".format(item))
+    for index, item in enumerate(prices):
+        prices[index] = float("{:.2f}".format(item))
+
+    # turns the total and prices into a dict associated with the stock symbol
     totalDict = dict(zip(symbols, total))
     priceDict = dict(zip(symbols, prices))
 
+    # updates the total and prices with the latest information on the DB
     for key in totalDict:
-        db.execute("UPDATE transactions SET total = ? WHERE symbol = ?", totalDict[key], key)
+        db.execute("UPDATE transactions SET total = ? WHERE symbol = ? AND user_id = ?", totalDict[key], key, session["user_id"])
     for key in priceDict:
-        db.execute("UPDATE transactions SET price = ? WHERE symbol = ?", priceDict[key], key)
+        db.execute("UPDATE transactions SET price = ? WHERE symbol = ? AND user_id = ?", priceDict[key], key, session["user_id"])
 
+    # selects the cash the user current has
     cash = db.execute("SELECT cash from users WHERE id = ?", session["user_id"])
     for dictionary in cash:
         cash = dictionary["cash"]
 
-    print(transactions)
-    return render_template("index.html", transactions=transactions, cash=cash)
+    # Limits cash to 2 decimal points
+    cash = float("{:.2f}".format(cash))
+    
+    TOTAL = cash
+
+    for item in total:
+        TOTAL += item
+
+    TOTAL = float("{:.2f}".format(TOTAL))
+
+    return render_template("index.html", transactions=transactions, cash=cash, total=TOTAL)
 
 
 @app.route("/buy", methods=["GET", "POST"])
