@@ -45,3 +45,9 @@ main img
     /* Constrain images on small screens */
     max-width: 100%;
 }
+
+.left
+{
+    text-align: left;
+    padding: 10px;
+}

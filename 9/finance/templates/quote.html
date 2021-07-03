@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block main %}
+    <h1 class="left">Quote</h1>
     <form action="/quote" method="post">
         <div class="form-group">
             <input autocomplete="off" required autofocus class="form-control" name="symbol" placeholder="Symbol" type="text" oninput="this.value = this.value.toUpperCase()">
