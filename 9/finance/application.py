@@ -117,6 +117,9 @@ def buy():
         elif shares_transacted == '':
             return apology("must provide number of shares")
 
+        if not shares_transacted.isdigit():
+            return apology("must provide valid number of shares")
+
         # Converts the number of shares to an integer
         shares_transacted = int(shares_transacted)
 
@@ -339,6 +342,9 @@ def sell():
             return apology("invalid symbol")
         elif shares_transacted == '':
             return apology("must provide number of shares")
+
+        if not shares_transacted.isdigit():
+            return apology("must provide valid number of shares")
 
         # Converts the number of shares to an integer
         shares_transacted = int(shares_transacted)
