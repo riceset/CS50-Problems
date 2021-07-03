@@ -186,8 +186,13 @@ def buy():
 @login_required
 def history():
     """Show history of transactions"""
+    history = db.execute("SELECT * FROM history where user_id = ?", session["user_id"])
+    reversedHist = []
 
-    return apology("TODO")
+    for dictionary in reversed(history):
+        reversedHist.append(dictionary)
+
+    return render_template("history.html", history=reversedHist)
 
 
 @app.route("/login", methods=["GET", "POST"])

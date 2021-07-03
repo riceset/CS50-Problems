@@ -1,10 +1,11 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Portfolio
+    History
 {% endblock %}
 
 {% block main %}
+<h1>History</h1>
 <table class="table table-striped">
     <thead>
         <tr>
@@ -18,28 +19,21 @@
         </tr>
     </thead>
     <tbody>
-        {% for item in portfolio%}
+        {% for item in history%}
         <tr>
             <td>{{item.symbol}}</td>
             <td>{{item.name}}</td>
-            <td>{{item.current_shares}}</td>
-            <td>{{item.current_price | usd}}</td>
-            <td>{{item.current_total | usd}}</td>
+            {% if item.transaction_type == "SELL"%}
+                <td>-{{item.transacted_shares}}</td>
+            {% else %}
+                <td>+{{item.transacted_shares}}</td>
+            {% endif %}
+            <td>{{item.transacted_price | usd}}</td>
+            <td>{{item.transacted_total | usd}}</td>
+            <td>{{item.date}}</td>
+            <td>{{item.time}}</td>
         </tr>
         {% endfor %}
-        <tr>
-            <td>CASH</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>{{cash | usd}}</td>
-        </tr>
     </tbody>
-    <tfoot>
-        <tr>
-            <td colspan="4"></td>
-            <td>{{total | usd}}</td>
-        </tr>
-    </tfoot>
 </table>
 {% endblock %}
