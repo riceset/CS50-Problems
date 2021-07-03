@@ -187,6 +187,11 @@ def buy():
 def history():
     """Show history of transactions"""
     history = db.execute("SELECT * FROM history where user_id = ?", session["user_id"])
+
+    # Renders another page if the history is empty
+    if len(history) == 0:
+        return render_template("empty.html")
+
     reversedHist = []
 
     for dictionary in reversed(history):
