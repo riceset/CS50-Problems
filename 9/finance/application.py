@@ -156,8 +156,10 @@ def buy():
         db.execute("UPDATE users SET cash = ? WHERE id = ?", current_cash, session["user_id"])
 
         # Gets the date and time
-        # date = datetime.today().strftime('%Y/%m/%d')
-        # time = datetime.today().strftime('%H:%M:%S')
+        date = datetime.today().strftime('%Y/%m/%d')
+        time = datetime.today().strftime('%H:%M:%S')
+
+        db.execute("INSERT INTO history (transaction_type, user_id, symbol, name, transacted_shares, transacted_price, transacted_total, date, time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", "PURCHASE", session["user_id"], symbol, name, shares_transacted, price, purchase_total, date, time)
 
         current_shares = db.execute("SELECT current_shares FROM portfolio WHERE user_id = ? AND symbol = ?",
                                     session["user_id"], symbol)
@@ -184,6 +186,7 @@ def buy():
 @login_required
 def history():
     """Show history of transactions"""
+
     return apology("TODO")
 
 
@@ -368,8 +371,9 @@ def sell():
 
         # Gets information about stock
         stock_info = lookup(symbol)
-        # Gets the price of the stock
+        # Gets the price / name of the stock
         price = stock_info["price"]
+        name = stock_info["name"]
 
         # calculates the transaction total
         transaction_total = price * shares_transacted
@@ -384,6 +388,12 @@ def sell():
             current_cash = dictionary["cash"]
 
         db.execute("UPDATE users SET cash = ? WHERE id = ?", current_cash + transaction_total, session["user_id"])
+
+        # Gets the date and time
+        date = datetime.today().strftime('%Y/%m/%d')
+        time = datetime.today().strftime('%H:%M:%S')
+
+        db.execute("INSERT INTO history (transaction_type, user_id, symbol, name, transacted_shares, transacted_price, transacted_total, date, time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", "SELL", session["user_id"], symbol, name, shares_transacted, price, transaction_total, date, time)
 
         return redirect("/")
 
