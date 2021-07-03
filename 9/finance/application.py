@@ -46,7 +46,6 @@ SPECIAL = ['!', '"', '#', '$', '%', '&', '(', ')', '*', '+', '-', '.', ',', '/',
 @login_required
 def index():
     """Show portfolio of stocks"""
-    portfolio = db.execute("SELECT * FROM portfolio WHERE user_id = ?", session["user_id"])
 
     # Gets all the relevant stock information
     symbolShares = db.execute("SELECT symbol, current_shares FROM portfolio where user_id = ?", session["user_id"])
@@ -77,6 +76,11 @@ def index():
     totalDict = dict(zip(symbols, total))
     priceDict = dict(zip(symbols, prices))
 
+    # Delete from the portfolio if the user has 0 shares
+    for share in shares:
+        if share == 0:
+            db.execute("DELETE FROM portfolio WHERE current_shares = 0")
+
     # updates the total and prices with the latest information on the DB
     for key in totalDict:
         db.execute("UPDATE portfolio SET current_total = ? WHERE symbol = ? AND user_id = ?", totalDict[key], key, session["user_id"])
@@ -93,6 +97,7 @@ def index():
     for item in total:
         TOTAL += item
 
+    portfolio = db.execute("SELECT * FROM portfolio WHERE user_id = ?", session["user_id"])
     return render_template("index.html", portfolio=portfolio, cash=cash, total=TOTAL)
 
 
@@ -146,7 +151,7 @@ def buy():
         current_cash = current_cash - purchase_total
 
         # Updates the DB
-        # db.execute("UPDATE users SET cash = ? WHERE id = ?", current_cash, session["user_id"])
+        db.execute("UPDATE users SET cash = ? WHERE id = ?", current_cash, session["user_id"])
 
         # Gets the date and time
         # date = datetime.today().strftime('%Y/%m/%d')
@@ -269,13 +274,13 @@ def register():
 
         # Checks for empty input
         if not username:
-            return apology("must provide username", 403)
+            return apology("must provide username", 400)
 
         elif not password:
-            return apology("must provide password", 403)
+            return apology("must provide password", 400)
 
         elif not confirmation:
-            return apology("must confirm password", 403)
+            return apology("must confirm password", 400)
 
         # Checks if the username entered is already registered on the DB
         elif len(username_matches) == 1:
@@ -343,9 +348,14 @@ def sell():
         if shares_transacted < 1:
             return apology("must provide valid number of shares")
 
-        current_shares = db.execute("SELECT current_shares FROM portfolio WHERE id = ? AND symbol = ?", session["user_id"], symbol)
+        current_shares = db.execute("SELECT current_shares FROM portfolio WHERE user_id = ? AND symbol = ?", session["user_id"], symbol)
+        print(current_shares)
         for dictionary in current_shares:
             current_shares = dictionary["current_shares"]
+
+        # If 0 elements is found, convert the empty list returned into the int 0
+        if current_shares == []:
+            current_shares = 0
 
         # If the num of shares the user has is less then the num of shares they wanna sell
         if current_shares < shares_transacted:
