@@ -1,10 +1,25 @@
 {% extends "layout.html" %}
 
 {% block title %}
+    {% if sender == "history" %}
     History
+    {% else %}
+    Portfolio
+    {% endif %}
 {% endblock %}
 
 {% block main %}
+    {% if sender == "history" %}
+
     <h1>Nothing Here Yet.</h1>
-    <p>No transactions were found to display.<p>
+    <p>No transactions were found on your history to display.<p>
+
+    {% else %}
+
+    <h1>Welcome!</h1>
+    <p>Your portfolio is empty.</p>
+    <p>All of your stocks will appear here once you own at least one.</p>
+    <p>Your currently own: {{cash | usd}}</p>
+    {% endif %}
+
 {% endblock %}

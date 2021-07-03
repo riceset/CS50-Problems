@@ -96,7 +96,11 @@ def index():
     for item in total:
         TOTAL += item
 
+    # If the user doesn't own any stocks yet, display an empty page
     portfolio = db.execute("SELECT * FROM portfolio WHERE user_id = ?", session["user_id"])
+    if len(portfolio) == 0:
+        return render_template("empty.html", sender="portfolio", cash=cash)
+
     return render_template("index.html", portfolio=portfolio, cash=cash, total=TOTAL)
 
 
@@ -190,7 +194,7 @@ def history():
 
     # Renders another page if the history is empty
     if len(history) == 0:
-        return render_template("empty.html")
+        return render_template("empty.html", sender="history")
 
     reversedHist = []
 
