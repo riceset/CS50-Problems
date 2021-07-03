@@ -46,17 +46,17 @@ SPECIAL = ['!', '"', '#', '$', '%', '&', '(', ')', '*', '+', '-', '.', ',', '/',
 @login_required
 def index():
     """Show portfolio of stocks"""
-    transactions = db.execute("SELECT * FROM transactions WHERE user_id = ?", session["user_id"])
+    portfolio = db.execute("SELECT * FROM portfolio WHERE user_id = ?", session["user_id"])
 
     # Gets all the relevant stock information
-    symbolShares = db.execute("SELECT symbol, shares FROM transactions where user_id = ?", session["user_id"])
+    symbolShares = db.execute("SELECT symbol, current_shares FROM portfolio where user_id = ?", session["user_id"])
 
-    # creates 3 lists with symbols / shares / price from all the stocks the user has
+    # creates 2 lists with symbols / shares from all the stocks the user has
     symbols = []
     shares = []
     for dictionary in symbolShares:
         symbols.append(dictionary["symbol"])
-        shares.append(dictionary["shares"])
+        shares.append(dictionary["current_shares"])
 
     # Gets a list of dictionaries with the newest information for each stock
     incomingInfo = []
@@ -73,38 +73,27 @@ def index():
     for share, price, in zip(shares, prices):
         total.append(share * price)
 
-    # Limits all values to 2 decimal points
-    for index, item in enumerate(total):
-        total[index] = float("{:.2f}".format(item))
-    for index, item in enumerate(prices):
-        prices[index] = float("{:.2f}".format(item))
-
     # turns the total and prices into a dict associated with the stock symbol
     totalDict = dict(zip(symbols, total))
     priceDict = dict(zip(symbols, prices))
 
     # updates the total and prices with the latest information on the DB
     for key in totalDict:
-        db.execute("UPDATE transactions SET total = ? WHERE symbol = ? AND user_id = ?", totalDict[key], key, session["user_id"])
+        db.execute("UPDATE portfolio SET current_total = ? WHERE symbol = ? AND user_id = ?", totalDict[key], key, session["user_id"])
     for key in priceDict:
-        db.execute("UPDATE transactions SET price = ? WHERE symbol = ? AND user_id = ?", priceDict[key], key, session["user_id"])
+        db.execute("UPDATE portfolio SET current_price = ? WHERE symbol = ? AND user_id = ?", priceDict[key], key, session["user_id"])
 
     # selects the cash the user current has
     cash = db.execute("SELECT cash from users WHERE id = ?", session["user_id"])
     for dictionary in cash:
         cash = dictionary["cash"]
-
-    # Limits cash to 2 decimal points
-    cash = float("{:.2f}".format(cash))
     
     TOTAL = cash
 
     for item in total:
         TOTAL += item
 
-    TOTAL = float("{:.2f}".format(TOTAL))
-
-    return render_template("index.html", transactions=transactions, cash=cash, total=TOTAL)
+    return render_template("index.html", portfolio=portfolio, cash=cash, total=TOTAL)
 
 
 @app.route("/buy", methods=["GET", "POST"])
@@ -116,19 +105,19 @@ def buy():
 
         # Gets the inputted symbol
         symbol = request.form.get("symbol")
-        shares = request.form.get("shares")
+        shares_transacted = request.form.get("shares")
 
         # Checks if the input fields are blank
         if symbol == '':
             return apology("must provide symbol")
-        elif shares == '':
+        elif shares_transacted == '':
             return apology("must provide number of shares")
 
         # Converts the number of shares to an integer
-        shares = int(shares)
+        shares_transacted = int(shares_transacted)
 
         # Checks if the number of shares the user is trying to buy is valid
-        if shares < 1:
+        if shares_transacted < 1:
             return apology("must provide valid number of shares")
 
         # Gets the information about it
@@ -142,29 +131,41 @@ def buy():
         name = stock_info["name"]
         price = stock_info["price"]
 
-        # Gets the cash the current user has
-        cash = db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])
-        for dictionary in cash:
-            cash = dictionary["cash"]
+        purchase_total = price * shares_transacted
 
-        total = price * shares
+        # Gets the cash the current user has
+        current_cash = db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])
+        for dictionary in current_cash:
+            current_cash = dictionary["cash"]
 
         # If the user can't afford the purchase
-        if cash < total:
+        if current_cash < purchase_total:
             return apology("can't afford")
 
         # Purchase process
-        cash = cash - total
+        current_cash = current_cash - purchase_total
 
         # Updates the DB
-        db.execute("UPDATE users SET cash = ? WHERE id = ?", cash, session["user_id"])
+        # db.execute("UPDATE users SET cash = ? WHERE id = ?", current_cash, session["user_id"])
 
         # Gets the date and time
-        date = datetime.today().strftime('%Y/%m/%d')
-        time = datetime.today().strftime('%H:%M:%S')
+        # date = datetime.today().strftime('%Y/%m/%d')
+        # time = datetime.today().strftime('%H:%M:%S')
 
-        # Inserts all the transaction information into a table
-        db.execute("INSERT INTO transactions (symbol, name, price, shares, total, date, time, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", symbol, name, price, shares, total, date, time, session["user_id"])
+        current_shares = db.execute("SELECT current_shares FROM portfolio WHERE user_id = ? AND symbol = ?",
+                                    session["user_id"], symbol)
+        if len(current_shares) == 0:
+            # Log the purchase
+            db.execute("INSERT INTO portfolio (user_id, symbol, name, current_shares, current_price, current_total) VALUES (?, ?, ?, ?, ?, ?)", session["user_id"], symbol, name, shares_transacted, price, purchase_total)
+        else:
+            for dictionary in current_shares:
+                current_shares = dictionary["current_shares"]
+
+            # Update the index page with the latest information
+            total_shares = current_shares + shares_transacted
+            updated_total = price * total_shares
+
+            db.execute("UPDATE portfolio SET current_shares = ?, current_price = ?, current_total = ? WHERE user_id = ? AND symbol = ?", total_shares, price, updated_total, session["user_id"], symbol)
 
         return redirect("/")
 
@@ -313,7 +314,66 @@ def register():
 @login_required
 def sell():
     """Sell shares of stock"""
-    return apology("TODO")
+
+    # Gets all the symbols for the stocks the current user has, puts them on a list and displays
+    # them on the selector when loading the page
+    symbolsDict = db.execute("SELECT symbol FROM portfolio WHERE user_id = ?", session["user_id"])
+    symbols = []
+    for dictionary in symbolsDict:
+        symbols.append(dictionary["symbol"])
+
+    if request.method == "POST":
+
+        # Gets the inputted symbol
+        symbol = request.form.get("symbol")
+        shares_transacted = request.form.get("shares")
+
+        # ERROR CHECKING
+        if symbol == "":
+            return apology("missing symbol")
+        if symbol not in symbols:
+            return apology("invalid symbol")
+        elif shares_transacted == '':
+            return apology("must provide number of shares")
+
+        # Converts the number of shares to an integer
+        shares_transacted = int(shares_transacted)
+
+        # Checks if the number of shares the user is trying to buy is valid
+        if shares_transacted < 1:
+            return apology("must provide valid number of shares")
+
+        current_shares = db.execute("SELECT current_shares FROM portfolio WHERE id = ? AND symbol = ?", session["user_id"], symbol)
+        for dictionary in current_shares:
+            current_shares = dictionary["current_shares"]
+
+        # If the num of shares the user has is less then the num of shares they wanna sell
+        if current_shares < shares_transacted:
+            return apology("too many shares")
+
+        # Gets information about stock
+        stock_info = lookup(symbol)
+        # Gets the price of the stock
+        price = stock_info["price"]
+
+        # calculates the transaction total
+        transaction_total = price * shares_transacted
+
+        # calculates the symbol's total
+        total = price * (current_shares - shares_transacted)
+
+        db.execute("UPDATE portfolio SET current_shares = ?, current_price = ?, current_total = ? WHERE user_id = ? AND symbol = ?", current_shares - shares_transacted, price, total, session["user_id"], symbol)
+
+        current_cash = db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])
+        for dictionary in current_cash:
+            current_cash = dictionary["cash"]
+
+        db.execute("UPDATE users SET cash = ? WHERE id = ?", current_cash + transaction_total, session["user_id"])
+
+        return redirect("/")
+
+    else:
+        return render_template("sell.html", symbols=symbols)
 
 
 def errorhandler(e):
