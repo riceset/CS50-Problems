@@ -18,8 +18,10 @@ body {
 }
 
 .jumbotron {
+    /* source: https://www.w3schools.com/css/css3_gradients.asp */
     background-image: linear-gradient(to right, #ff432e, #fdef14, #4aa8db, #b1eb00, #ff85cb);
     color: #fff;
+    /* source: https://www.w3schools.com/cssref/css3_pr_text-shadow.asp */
     text-shadow: 2px 2px 2px #000;
     margin-bottom: 2rem;
     padding: 2rem 1rem;
