@@ -23,6 +23,7 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
+
 # Custom filter
 app.jinja_env.filters["usd"] = usd
 
@@ -39,7 +40,9 @@ db = SQL("sqlite:///finance.db")
 if not os.environ.get("API_KEY"):
     raise RuntimeError("API_KEY not set")
 
-SPECIAL = ['!', '"', '#', '$', '%', '&', '(', ')', '*', '+', '-', '.', ',', '/', ':', ';', '<', '>', '=', '?', '@', '[', ']', '^', '_', '`', '{', '}', '|', '~', "'"]
+SPECIAL = ['!', '"', '#', '$', '%', '&', '(', ')', '*', '+', '-', '.', ',', '/', ':', ';',
+           '<', '>', '=', '?', '@', '[', ']', '^', '_', '`', '{', '}', '|', '~', "'"]
+
 
 @app.route("/")
 @login_required
@@ -82,9 +85,11 @@ def index():
 
     # updates the total and prices with the latest information on the DB
     for key in totalDict:
-        db.execute("UPDATE portfolio SET current_total = ? WHERE symbol = ? AND user_id = ?", totalDict[key], key, session["user_id"])
+        db.execute("UPDATE portfolio SET current_total = ? WHERE symbol = ? AND user_id = ?",
+                   totalDict[key], key, session["user_id"])
     for key in priceDict:
-        db.execute("UPDATE portfolio SET current_price = ? WHERE symbol = ? AND user_id = ?", priceDict[key], key, session["user_id"])
+        db.execute("UPDATE portfolio SET current_price = ? WHERE symbol = ? AND user_id = ?",
+                   priceDict[key], key, session["user_id"])
 
     # selects the cash the user current has
     cash = db.execute("SELECT cash from users WHERE id = ?", session["user_id"])
@@ -165,14 +170,16 @@ def buy():
         time = datetime.today().strftime('%H:%M:%S')
 
         # register the purchase
-        db.execute("INSERT INTO history (transaction_type, user_id, symbol, name, transacted_shares, transacted_price, transacted_total, date, time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", "PURCHASE", session["user_id"], symbol, name, shares_transacted, price, purchase_total, date, time)
+        db.execute("INSERT INTO history (transaction_type, user_id, symbol, name, transacted_shares, transacted_price, transacted_total, date, time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                   "PURCHASE", session["user_id"], symbol, name, shares_transacted, price, purchase_total, date, time)
 
         # Checks if it's the first purchase of a stock (to INSERT it) otherwise, UPDATE it
         current_shares = db.execute("SELECT current_shares FROM portfolio WHERE user_id = ? AND symbol = ?",
                                     session["user_id"], symbol)
         if len(current_shares) == 0:
             # Log the purchase
-            db.execute("INSERT INTO portfolio (user_id, symbol, name, current_shares, current_price, current_total) VALUES (?, ?, ?, ?, ?, ?)", session["user_id"], symbol, name, shares_transacted, price, purchase_total)
+            db.execute("INSERT INTO portfolio (user_id, symbol, name, current_shares, current_price, current_total) VALUES (?, ?, ?, ?, ?, ?)",
+                       session["user_id"], symbol, name, shares_transacted, price, purchase_total)
         else:
             for dictionary in current_shares:
                 current_shares = dictionary["current_shares"]
@@ -181,7 +188,8 @@ def buy():
             total_shares = current_shares + shares_transacted
             updated_total = price * total_shares
 
-            db.execute("UPDATE portfolio SET current_shares = ?, current_price = ?, current_total = ? WHERE user_id = ? AND symbol = ?", total_shares, price, updated_total, session["user_id"], symbol)
+            db.execute("UPDATE portfolio SET current_shares = ?, current_price = ?, current_total = ? WHERE user_id = ? AND symbol = ?",
+                       total_shares, price, updated_total, session["user_id"], symbol)
 
         return redirect("/")
 
@@ -337,10 +345,11 @@ def register():
     else:
         return render_template("register.html")
 
-# Allows the user to add money
+
 @app.route("/add", methods=["GET", "POST"])
 @login_required
 def add():
+    # Allows the user to add money
     # Gets the user's current cash
     current_cash = db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])
     for dictionary in current_cash:
@@ -369,11 +378,13 @@ def add():
         db.execute("UPDATE users SET cash = ? WHERE id = ?", current_cash + quantity, session["user_id"])
 
         # logs
-        db.execute("INSERT INTO history (transaction_type, user_id, symbol, name, transacted_shares, transacted_price, transacted_total, date, time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", "CHARGE", session["user_id"], "-", "-", 0, quantity, quantity, date, time)
+        db.execute("INSERT INTO history (transaction_type, user_id, symbol, name, transacted_shares, transacted_price, transacted_total, date, time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                   "CHARGE", session["user_id"], "-", "-", 0, quantity, quantity, date, time)
         return redirect("/")
 
     else:
         return render_template("add.html", cash=current_cash)
+
 
 @app.route("/sell", methods=["GET", "POST"])
 @login_required
@@ -411,7 +422,8 @@ def sell():
         if shares_transacted < 1:
             return apology("must provide valid number of shares")
 
-        current_shares = db.execute("SELECT current_shares FROM portfolio WHERE user_id = ? AND symbol = ?", session["user_id"], symbol)
+        current_shares = db.execute("SELECT current_shares FROM portfolio WHERE user_id = ? AND symbol = ?", 
+                                    session["user_id"], symbol)
         print(current_shares)
         for dictionary in current_shares:
             current_shares = dictionary["current_shares"]
@@ -436,7 +448,8 @@ def sell():
         # calculates the symbol's total
         total = price * (current_shares - shares_transacted)
 
-        db.execute("UPDATE portfolio SET current_shares = ?, current_price = ?, current_total = ? WHERE user_id = ? AND symbol = ?", current_shares - shares_transacted, price, total, session["user_id"], symbol)
+        db.execute("UPDATE portfolio SET current_shares = ?, current_price = ?, current_total = ? WHERE user_id = ? AND symbol = ?", 
+                   current_shares - shares_transacted, price, total, session["user_id"], symbol)
 
         current_cash = db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])
         for dictionary in current_cash:
@@ -448,7 +461,8 @@ def sell():
         date = datetime.today().strftime('%Y/%m/%d')
         time = datetime.today().strftime('%H:%M:%S')
 
-        db.execute("INSERT INTO history (transaction_type, user_id, symbol, name, transacted_shares, transacted_price, transacted_total, date, time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", "SELL", session["user_id"], symbol, name, shares_transacted, price, transaction_total, date, time)
+        db.execute("INSERT INTO history (transaction_type, user_id, symbol, name, transacted_shares, transacted_price, transacted_total, date, time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+                   "SELL", session["user_id"], symbol, name, shares_transacted, price, transaction_total, date, time)
 
         return redirect("/")
 
