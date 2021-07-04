@@ -333,6 +333,36 @@ def register():
     else:
         return render_template("register.html")
 
+# Allows the user to add money
+@app.route("/add", methods=["GET", "POST"])
+@login_required
+def add():
+    # Gets the user's current cash
+    current_cash = db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])
+    for dictionary in current_cash:
+        current_cash = dictionary["cash"]
+
+    if request.method == "POST":
+        quantity = request.form.get("quantity")
+
+        if quantity == '':
+            return apology("must provide the quantity")
+
+        if not quantity.isdigit():
+            return apology("must provide a valid quantity")
+
+        # Converts the quantity to an integer
+        quantity = int(quantity)
+
+        if quantity < 0 or quantity > 10000:
+            return apology("invalid quantity")
+
+        db.execute("UPDATE users SET cash = ? WHERE id = ?", current_cash + quantity, session["user_id"])
+
+        return redirect("/")
+
+    else:
+        return render_template("add.html", cash=current_cash)
 
 @app.route("/sell", methods=["GET", "POST"])
 @login_required
