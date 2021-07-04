@@ -91,6 +91,7 @@ def index():
     for dictionary in cash:
         cash = dictionary["cash"]
     
+    # Calculates the total
     TOTAL = cash
 
     for item in total:
@@ -111,7 +112,7 @@ def buy():
 
     if request.method == "POST":
 
-        # Gets the inputted symbol
+        # Gets the inputted symbol and number of shares
         symbol = request.form.get("symbol")
         shares_transacted = request.form.get("shares")
 
@@ -163,8 +164,10 @@ def buy():
         date = datetime.today().strftime('%Y/%m/%d')
         time = datetime.today().strftime('%H:%M:%S')
 
+        # register the purchase
         db.execute("INSERT INTO history (transaction_type, user_id, symbol, name, transacted_shares, transacted_price, transacted_total, date, time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", "PURCHASE", session["user_id"], symbol, name, shares_transacted, price, purchase_total, date, time)
 
+        # Checks if it's the first purchase of a stock (to INSERT it) otherwise, UPDATE it
         current_shares = db.execute("SELECT current_shares FROM portfolio WHERE user_id = ? AND symbol = ?",
                                     session["user_id"], symbol)
         if len(current_shares) == 0:
@@ -196,6 +199,7 @@ def history():
     if len(history) == 0:
         return render_template("empty.html", sender="history")
 
+    # reverses the list for the latest information appear on the top
     reversedHist = []
 
     for dictionary in reversed(history):
@@ -314,16 +318,16 @@ def register():
             return apology("password must be at least 6 characters")
 
         elif not any(char.isdigit() for char in password):
-            return apology("passwords should contain at least ine number")
+            return apology("password should contain at least one number")
 
         elif not any(char.isupper() for char in password):
-            return apology("password should contain at leats one uppercase letter")
+            return apology("password should contain at least one uppercase letter")
 
         elif not any(char.islower() for char in password):
-            return apology("password should contain at leats one lowercase letter")
+            return apology("password should contain at least one lowercase letter")
 
         elif not any(char in SPECIAL for char in password):
-            return apology("passwords should have at least one special character")
+            return apology("password should have at least one special character")
 
         # Inserts the new user into the DB
         db.execute("INSERT INTO users (username, hash) VALUES (?, ?)", username, generate_password_hash(password))
@@ -354,11 +358,18 @@ def add():
         # Converts the quantity to an integer
         quantity = int(quantity)
 
-        if quantity < 0 or quantity > 10000:
-            return apology("invalid quantity")
+        # allows only adding 1000 dollars at a time
+        if quantity < 0 or quantity > 1000:
+            return apology("invalid quantity (max: $1000.00)")
+
+        # Gets the date and time
+        date = datetime.today().strftime('%Y/%m/%d')
+        time = datetime.today().strftime('%H:%M:%S')
 
         db.execute("UPDATE users SET cash = ? WHERE id = ?", current_cash + quantity, session["user_id"])
 
+        # logs
+        db.execute("INSERT INTO history (transaction_type, user_id, symbol, name, transacted_shares, transacted_price, transacted_total, date, time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", "CHARGE", session["user_id"], "-", "-", 0, quantity, quantity, date, time)
         return redirect("/")
 
     else:
@@ -396,7 +407,7 @@ def sell():
         # Converts the number of shares to an integer
         shares_transacted = int(shares_transacted)
 
-        # Checks if the number of shares the user is trying to buy is valid
+        # Checks if the number of shares the user is trying to sell is valid
         if shares_transacted < 1:
             return apology("must provide valid number of shares")
 

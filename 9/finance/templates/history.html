@@ -20,6 +20,17 @@
     </thead>
     <tbody>
         {% for item in history%}
+        {% if item.transaction_type == "CHARGE" %}
+        <tr>
+            <td>-</td>
+            <td>CHARGE</td>
+            <td>-</td>
+            <td>{{item.transacted_price | usd}}</td>
+            <td>{{item.transacted_total | usd}}</td>
+            <td>{{item.date}}</td>
+            <td>{{item.time}}</td>
+        </tr>
+        {% else %}
         <tr>
             <td>{{item.symbol}}</td>
             <td>{{item.name}}</td>
@@ -33,6 +44,7 @@
             <td>{{item.date}}</td>
             <td>{{item.time}}</td>
         </tr>
+        {% endif %}
         {% endfor %}
     </tbody>
 </table>
