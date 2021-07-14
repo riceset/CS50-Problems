@@ -8,11 +8,15 @@ auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
 try:
+    if len(argv) > 2:
+        raise Exception()
+
     tweet = argv[1]
+
     api.update_status(tweet)
     print(f"Tweeted Successfully:\n\"{tweet}\"")
 
-except IndexError:
+except (IndexError, Exception):
     exit('Usage: python twtcl.py "TWEET".')
 
 except tweepy.error.TweepError:
