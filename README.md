@@ -3,7 +3,7 @@
 </h1>
 
 <p align="center">
-	<b><i>@Harvard's CS50 Course.</i></b><br>
+	<b><i>Harvard's CS50 Course.</i></b><br>
 </p>
 
 ## Summary
