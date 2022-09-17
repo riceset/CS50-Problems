@@ -8,7 +8,7 @@
 
 ## Summary
 
-> This is my repository for CS50. A course I took in 2020.
+> This is my repository for CS50. A course I took in 2021.
 
 ## Table of Contents
 
