@@ -1,5 +1,5 @@
 <h1 align="center">
-	CS50
+	This is CS50
 </h1>
 
 <p align="center">
