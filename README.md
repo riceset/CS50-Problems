@@ -3,7 +3,7 @@
 </h1>
 
 <p align="center">
-	<b><i>Harvard's CS50 Course.</i></b><br>
+	<img src="https://github.com/riceset/Harvard-CS50/assets/48802655/ca2a5107-c56a-4b79-a2ae-32ff3144b223" width=200 height=200/>
 </p>
 
 ## Introduction
@@ -37,7 +37,7 @@ $ git clone https://github.com/riceset/Harvard-CS50
 
 ## Coursework
 
-In this section, you'll find my solutions and submissions for the problem sets and exercises provided throughout the CS50 course. Each problem set has its own folder with the relevant code and any necessary resources.
+In this section, you'll find my solutions and submissions for the problem sets and labs provided throughout the CS50 course. Each pset/lab has its own folder with the relevant code and any necessary resources.
 
 - ***[Week 1](https://github.com/riceset/Harvard-CS50/tree/main/1)***
 - ***[Week 2](https://github.com/riceset/Harvard-CS50/tree/main/2)***
@@ -50,11 +50,6 @@ In this section, you'll find my solutions and submissions for the problem sets a
 - ***[Week 9](https://github.com/riceset/Harvard-CS50/tree/main/9)***
 - ***[Ethics](https://github.com/riceset/Harvard-CS50/tree/main/ethics)***
 - ***[Final Project](https://github.com/riceset/Harvard-CS50/tree/main/final)***
-...
-
-## Projects
-
-CS50 also includes several larger projects that test our understanding of various concepts. In this section, you'll find the projects I've completed during the course, along with any documentation or additional resources related to each project.
 
 ## How to Use
 
