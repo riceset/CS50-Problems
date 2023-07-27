@@ -61,6 +61,10 @@ If you wish to use any of the code in this repository, please keep in mind the f
 
 2. **Attribution:** If you find any code or resources in this repository helpful and want to use them in your own projects, make sure to give proper attribution. You can mention this repository and its URL in your project documentation or source code comments.
 
+## Certificate
+
+Here's my [certificate](https://cs50.harvard.edu/certificates/bd575551-1159-49e7-a81b-672d2526b34c) for completing the course.
+
 ## Contributing
 
 While this repository primarily contains my own work for CS50, I'm open to suggestions and improvements. If you have any feedback, bug fixes, or suggestions for new projects, feel free to create an issue or submit a pull request. Please follow the standard guidelines for contributing.
