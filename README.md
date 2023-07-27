@@ -48,8 +48,8 @@ In this section, you'll find my solutions and submissions for the problem sets a
 - ***[Week 7](https://github.com/riceset/Harvard-CS50/tree/main/7)***
 - ***[Week 8](https://github.com/riceset/Harvard-CS50/tree/main/8)***
 - ***[Week 9](https://github.com/riceset/Harvard-CS50/tree/main/9)***
-- ***[Ethics](https://github.com/riceset/Harvard-CS50/tree/main/ethics)***
-- ***[Final Project](https://github.com/riceset/Harvard-CS50/tree/main/final)***
+- ***[Ethics](https://github.com/riceset/Harvard-CS50/tree/main/Ethics)***
+- ***[Final Project](https://github.com/riceset/Harvard-CS50/tree/main/Final)***
 
 ## How to Use
 
