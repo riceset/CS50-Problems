@@ -65,7 +65,9 @@ If you wish to use any of the code in this repository, please keep in mind the f
 
 Here's my [certificate](https://cs50.harvard.edu/certificates/bd575551-1159-49e7-a81b-672d2526b34c) for completing the course.
 
-<a href="https://cs50.harvard.edu/certificates/bd575551-1159-49e7-a81b-672d2526b34c"> <img src="https://github.com/riceset/Harvard-CS50/assets/48802655/c794f6ca-eb62-48ce-a363-a66f6009be80" width=670 height=500/> </a>
+<a href="https://cs50.harvard.edu/certificates/bd575551-1159-49e7-a81b-672d2526b34c">
+<img src="https://github.com/riceset/Harvard-CS50/assets/48802655/c794f6ca-eb62-48ce-a363-a66f6009be80" width=670 height=500>
+</a>
 
 ## Contributing
 
