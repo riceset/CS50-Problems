@@ -14,6 +14,8 @@ CS50 is an excellent course that covers a wide range of fundamental topics in co
 
 Feel free to explore the contents of this repository and use the code as a reference or inspiration for your own projects. However, please keep in mind that academic integrity is essential, and copying the code without understanding is discouraged.
 
+Click [here](https://cs50.harvard.edu/x/2021/) for referencing the problems.
+
 ## Table of Contents
 
 1. [Getting Started](#getting-started)
