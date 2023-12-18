@@ -77,6 +77,6 @@ While this repository primarily contains my own work for CS50, I'm open to sugge
 
 This repository is licensed under the [MIT License](LICENSE). Please review the license file for more information on how you can use and distribute the code in this repository.
 
----
+##
 
 Thank you for visiting my CS50 repository! If you have any questions or need further assistance, feel free to contact me. Happy coding! 😊
